@@ -4,6 +4,8 @@ const RPC_URL = "https://ethereum-rpc.publicnode.com";
 const searchButton = document.querySelector("#search-button");
 const addressInput = document.querySelector("#wallet-address");
 const statusText = document.querySelector("#status");
+const balanceText = document.querySelector("#balance");
+const blockNumberText = document.querySelector("#block-number");
 
 // Ethereum RPC 서버에 요청을 보내는 함수
 async function rpcRequest(method, params) {
@@ -39,7 +41,33 @@ async function rpcRequest(method, params) {
     return data.result;
 }
 
-// 조회 버튼을 클릭했을 때 실행
+// Wei 단위의 16진수 잔액을 ETH로 변환
+function weiToEth(hexWei) {
+    const wei = BigInt(hexWei);
+    const WEI_PER_ETH = 1000000000000000000n;
+
+    // 정수 부분
+    const whole = wei / WEI_PER_ETH;
+
+    // 소수 부분
+    const fraction = (wei % WEI_PER_ETH)
+        .toString()
+        .padStart(18, "0")
+        .replace(/0+$/, "");
+
+    if (fraction === "") {
+        return `${whole} ETH`;
+    }
+
+    return `${whole}.${fraction} ETH`;
+}
+
+// 블록 번호를 16진수에서 10진수로 변환
+function hexToDecimal(hexValue) {
+    return BigInt(hexValue).toString(10);
+}
+
+// 조회 버튼 클릭
 searchButton.addEventListener("click", async () => {
     const address = addressInput.value.trim();
 
@@ -51,24 +79,31 @@ searchButton.addEventListener("click", async () => {
     statusText.textContent = "Ethereum 서버에 요청 중...";
 
     try {
-        // 지갑 잔액 요청
+        // 지갑 잔액 조회
         const balance = await rpcRequest(
             "eth_getBalance",
             [address, "latest"]
         );
 
-        // 현재 블록 번호 요청
+        // 현재 블록 번호 조회
         const blockNumber = await rpcRequest(
             "eth_blockNumber",
             []
         );
 
-        // 아직 변환하지 않은 원본 응답
+        // 원본 데이터 확인
         console.log("잔액 원본:", balance);
         console.log("블록 번호 원본:", blockNumber);
 
-        statusText.textContent =
-            "RPC 연결 성공! 개발자 도구에서 응답을 확인하세요.";
+        // 16진수 응답 변환
+        const ethBalance = weiToEth(balance);
+        const decimalBlock = hexToDecimal(blockNumber);
+
+        // 변환한 데이터를 화면에 표시
+        balanceText.textContent = ethBalance;
+        blockNumberText.textContent = decimalBlock;
+
+        statusText.textContent = "조회가 완료되었습니다.";
 
     } catch (error) {
         console.error("RPC 오류:", error);
