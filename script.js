@@ -144,3 +144,10 @@ searchButton.addEventListener("click", async () => {
         searchButton.textContent = "조회";
     }
 });
+
+// Enter 키로 지갑 조회
+addressInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" && !searchButton.disabled) {
+        searchButton.click();
+    }
+});
