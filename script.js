@@ -115,17 +115,11 @@ searchButton.addEventListener("click", async () => {
     statusText.textContent = "Ethereum 데이터를 불러오는 중...";
 
     try {
-        // 지갑 잔액 조회
-        const balance = await rpcRequest(
-            "eth_getBalance",
-            [address, "latest"]
-        );
-
-        // 현재 블록 번호 조회
-        const blockNumber = await rpcRequest(
-            "eth_blockNumber",
-            []
-        );
+        // 잔액과 블록 번호를 동시에 요청
+        const [balance, blockNumber] = await Promise.all([
+            rpcRequest("eth_getBalance", [address, "latest"]),
+            rpcRequest("eth_blockNumber", [])
+        ]);
 
         // 응답 변환
         const ethBalance = weiToEth(balance);
