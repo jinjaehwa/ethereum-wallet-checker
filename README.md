@@ -35,12 +35,15 @@ ethereum-wallet-checker/
 ├── index.html
 ├── style.css
 ├── script.js
-└── README.md
+├── README.md
+└── 진재화(Ethereum Wallet Checker 학습일지).pdf
 ```
 
 - `index.html`: 지갑 주소 입력창, 조회 버튼, 결과 표시 등 웹페이지의 구조
 - `style.css`: 웹페이지의 디자인과 버튼 상태에 따른 스타일
 - `script.js`: RPC 요청, 데이터 변환, 주소 검사, 로딩 및 오류 처리
+- `README.md`: 프로젝트 소개, 주요 기능, 실행 방법 및 개발 과정
+- `진재화(Ethereum Wallet Checker 학습일지).pdf`: 과제 수행 중 학습한 내용과 AI 활용 및 검증 과정
 
 처음에는 HTML, CSS, JavaScript를 왜 각각의 파일로 나누는지 궁금했습니다. 확인해 보니 화면의 구조, 디자인, 동작을 구분하여 관리하면 코드를 이해하거나 수정할 때 편리하다는 것을 알게 되었습니다.
 
